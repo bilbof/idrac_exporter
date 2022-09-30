@@ -1,9 +1,9 @@
 package main
 
 import (
-	"strings"
-	"math"
 	"fmt"
+	"math"
+	"strings"
 )
 
 func metricsClear(host *HostConfig) {

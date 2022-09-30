@@ -13,6 +13,27 @@ The latest version of the program does not only support iDRAC, but several syste
 * Dell iDRAC 9
 * Lenovo XClarity
 
+## OpenManage Enterprise for iDRAC Service Discovery
+
+You can use OME for discovering targets using the `/targets` endpoint.
+
+This requires the `hostname` and `ome` configuration parameters in the configuration file.
+
+This returns the targets in Prometheus [http_sd_config] format:
+
+```
+[
+  {
+    "targets": [ "https://idrac-exporter.example.org?target=192.168.1.1", ... ],
+    "labels": {
+      "<labelname>": "<labelvalue>", ...
+    }
+  }
+]
+```
+
+[http_sd_discovery]: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#http_sd_config
+
 ## Download
 The exporter is written in [Go](https://golang.org) and it can be downloaded and compiled using:
 ```bash
@@ -38,6 +59,12 @@ metrics:
   - sensors
   - power
   - sel            # iDRAC only
+# OPTIONAL: Use OpenManage Enterprise for iDRAC Service Discovery
+# hostname: dell-exporter.example.org # host for this exporter. Used only for OME service discovery.
+# ome:
+#   username: user
+#   password: pass
+#   hostname: 127.0.0.1:3004
 ```
 
 As shown in the example above, under `hosts` you can specify login information for individual hosts via their IP address, otherwise the exporter will attempt to use the login information under `default`. Under `metrics` you can select what kind of metrics that should be returned, as described in more detail below.
@@ -97,3 +124,9 @@ scrape_configs:
 ```
 
 Here `123.45.6.78` and `123.45.6.79` are the iDRACs to query, and `exporter:9348` is the address and port where `idrac_exporter` is running.
+
+## Run in a Docker container
+
+```shell
+make docker-build docker-run
+```

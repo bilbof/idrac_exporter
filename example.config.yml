@@ -1,0 +1,22 @@
+address: 127.0.0.1 # Listen address
+port: 9348         # Listen port
+timeout: 10        # HTTP timeout (in seconds) for Redfish API calls
+retries: 1         # Number of retries before a target is marked as unreachable
+hosts:
+  123.45.6.78:
+    username: user
+    password: pass
+  default:
+    username: user
+    password: pass
+metrics:
+  - system
+  - sensors
+  - power
+  - sel            # iDRAC only
+# OPTIONAL: Use OpenManage Enterprise for iDRAC Service Discovery
+# hostname: dell-exporter.example.org # host for this exporter. Used only for OME service discovery.
+# ome:
+#   username: user
+#   password: pass
+#   hostname: 127.0.0.1:3004

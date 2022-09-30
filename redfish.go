@@ -1,15 +1,15 @@
 package main
 
 import (
-	"log"
-	"time"
-	"math"
-	"strings"
-	"strconv"
-	"io/ioutil"
-	"net/http"
 	"crypto/tls"
 	"encoding/json"
+	"io/ioutil"
+	"log"
+	"math"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
 )
 
 var transport = &http.Transport{
@@ -18,7 +18,7 @@ var transport = &http.Transport{
 
 var client = &http.Client{
 	Transport: transport,
-	Timeout: time.Duration(config.Timeout)*time.Second,
+	Timeout:   time.Duration(config.Timeout) * time.Second,
 }
 
 type dict = map[string]interface{}
@@ -28,9 +28,9 @@ type stringmap = map[string]string
 func redfishGet(host *HostConfig, path string) (dict, bool) {
 	var result dict
 
-	url := "https://" + host.Hostname + path
+	url := "http://" + host.Hostname + path
 	req, err := http.NewRequest("GET", url, nil)
-	req.Header.Add("Authorization", "Basic " + host.Token)
+	req.Header.Add("Authorization", "Basic "+host.Token)
 	req.Header.Add("Accept", "application/json")
 	resp, err := client.Do(req)
 
@@ -120,7 +120,7 @@ func redfishSensors(host *HostConfig) bool {
 		}
 
 		args = stringmap{
-			"name": entry["Name"].(string),
+			"name":  entry["Name"].(string),
 			"units": "celsius",
 		}
 
@@ -166,7 +166,7 @@ func redfishSensors(host *HostConfig) bool {
 		}
 
 		args = stringmap{
-			"name": name,
+			"name":  name,
 			"units": strings.ToLower(units),
 		}
 
@@ -216,7 +216,7 @@ func redfishSystem(host *HostConfig) bool {
 	if value == math.Trunc(value) {
 		value = value * 1024
 	} else {
-		value = math.Floor(value*1099511627776.0/1000000000.0)
+		value = math.Floor(value * 1099511627776.0 / 1000000000.0)
 	}
 	metricsAppend(host, "memory_size", nil, value)
 
@@ -249,10 +249,10 @@ func redfishSEL(host *HostConfig) bool {
 		component, _ := entry["SensorType"].(string) // sometimes reported as null
 
 		args = stringmap{
-			"id": entry["Id"].(string),
-			"message": entry["Message"].(string),
+			"id":        entry["Id"].(string),
+			"message":   entry["Message"].(string),
 			"component": component,
-			"severity": entry["Severity"].(string),
+			"severity":  entry["Severity"].(string),
 		}
 
 		text = entry["Created"].(string)
